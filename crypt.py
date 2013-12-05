@@ -4,8 +4,9 @@ import string
 import logging
 logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 
-ENCRYPT = '-c'
+ENCRYPT = '-e'
 DECRYPT = '-d'
+
 
 def _rot13(s):
     """ convert a string to its ROT13 equivalent. """
@@ -61,7 +62,7 @@ if __name__ == '__main__':
     except:
         d = None
     if d not in [ENCRYPT, DECRYPT]:
-        logging.info("Usage: python crypt.py (-c|-d) [string]")
+        logging.info("Usage: python crypt.py ({0}) [string]".format('|'.join([ENCRYPT, DECRYPT])))
         sys.exit(0)
 
     try:
