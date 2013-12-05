@@ -4,11 +4,13 @@ import string
 import logging
 logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 
+ENCRYPT = '-c'
+DECRYPT = '-d'
 
 def _rot13(s):
     """ convert a string to its ROT13 equivalent. """
     rot13 = string.maketrans(
-        "ABCDEFGHIJKLMabcdefghijklmNOPQRSTUVWXYZnopqrstuvwxyz", 
+        "ABCDEFGHIJKLMabcdefghijklmNOPQRSTUVWXYZnopqrstuvwxyz",
         "NOPQRSTUVWXYZnopqrstuvwxyzABCDEFGHIJKLMabcdefghijklm")
     return string.translate(s, rot13)
 
@@ -25,7 +27,14 @@ def _ascii_to_hex(s):
 
 
 def _hex_to_ascii(s):
-    pass
+    tmp = list(s)
+    l = []
+    ret = ''
+    while tmp:
+        l.append(''.join([tmp.pop(0), tmp.pop(0)]))
+    for i in l:
+        ret += chr(int(i, 16))
+    return ret
 
 
 def _hex_to_binary(s):
@@ -38,8 +47,12 @@ def encrypt(s):
     s = _rot13(s)
     return s
 
+
 def decrypt(s):
     s = _rot13(s)
+    s = _hex_to_ascii(s)
+    s = _rot13(s)
+    return s
 
 
 if __name__ == '__main__':
@@ -47,7 +60,7 @@ if __name__ == '__main__':
         d = sys.argv[1]
     except:
         d = None
-    if d not in ['-c', '-d']:
+    if d not in [ENCRYPT, DECRYPT]:
         logging.info("Usage: python crypt.py (-c|-d) [string]")
         sys.exit(0)
 
@@ -59,6 +72,8 @@ if __name__ == '__main__':
     if not s:
         s = raw_input("String to convert: ")
 
-
-    logging.info(encrypt(s))
-    print "%x" %encrypt(s)
+    if d == ENCRYPT:
+        s = encrypt(s)
+    elif d == DECRYPT:
+        s = decrypt(s)
+    logging.info(s)
