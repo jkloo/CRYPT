@@ -66,7 +66,7 @@ if __name__ == '__main__':
         sys.exit(0)
 
     try:
-        s = sys.argv[2]
+        s = ' '.join(sys.argv[2:])
     except:
         s = None
 
